@@ -52,6 +52,7 @@ public class Story_Development {
             this.key = key;
             this.locked = locked;
         }
+        
         public void printItems(){
             if (this.items.length == 0){
                 System.out.println("Theres no items to grab");
@@ -76,6 +77,9 @@ public class Story_Development {
                 itemsName[i] = this.items[i].getName();
             }
             return itemsName;
+        }
+        public void setLock(boolean locked){
+            this.locked = locked;
         }
         public boolean isLocked(){
             return this.locked;
@@ -169,8 +173,9 @@ public class Story_Development {
             String[] choice = start.split(" ");
             
             switch (choice[0]){
-                
+
                 case "take":
+                    //since the input is split you add back the 
                     String item;
                     if (choice.length > 2){
                         item = choice[1]+" "+choice[2];
@@ -186,46 +191,59 @@ public class Story_Development {
                     }
                     break;
                 case "move":
-
+                    
                     switch (choice[1]) {
+                        //goes to each case that the user chose
                         case "east":
+                        //checks N,E,S,W to see if theres a room linked to the current room youre in
+                            //prints something if theres no room
                             if(story.getEast()== null ){
                                 System.out.println("You hit your head against a wall");
                             }else{
+                                //checks if the room is locked or if you have the key and its locked or its not locked
                                 if( (story.getEast().isLocked() && backpack.contains((story.getEast()).getKey())) || !story.getEast().isLocked()){
+                                    //if its locked and you have the key then it prints you opened the door and keeps it unlocked now 
                                     if(story.getEast().isLocked() && backpack.contains((story.getEast()).getKey())){
-                                        System.out.println("Youve unlocked a door");
+                                        story.getEast().setLock(false);
+                                        System.out.println("Youve unlocked a door/alter");
                                     }
+                                    //moves east
                                     story = story.getEast();
                                 }else{
+                                    //if you dont have the key and its locked and it states its locked
                                     System.out.println("ITS LOCKED YOU WEIRDO");
                                 }
                             }
                             break;
-
+                        //repeats for north as well 
                         case "north":
-                            if(story.getWest()== null ){
+                            if(story.getNorth()== null ){
                                 System.out.println("You hit your head against a wall");
                             }else{
-                                if( (story.getWest().isLocked() && backpack.contains((story.getWest()).getKey())) || !story.getWest().isLocked()){
-                                    if(story.getWest().isLocked() && backpack.contains((story.getWest()).getKey())){
-                                        System.out.println("Youve unlocked a door");
+                                if( (story.getNorth().isLocked() && backpack.contains((story.getNorth()).getKey())) || !story.getNorth().isLocked()){
+
+                                    if(story.getNorth().isLocked() && backpack.contains((story.getNorth()).getKey())){
+                                        story.getNorth().setLock(false);
+                                        System.out.println("Youve unlocked a door/alter");
                                     }
-                                    story = story.getWest();
+
+                                    story = story.getNorth();
                                 }else{
                                     System.out.println("ITS LOCKED YOU WEIRDO");
                                 }
                             }
                         
                             break;
-
+                        //repeats for south as well
                         case "south":
                             if(story.getSouth()== null ){
                                 System.out.println("You hit your head against a wall");
                             }else{
-                                if( (story.getSouth().isLocked() && backpack.contains((story.getSouth()).getKey())) || !story.getSouth().isLocked()){
+                                if( ( story.getSouth().isLocked() && backpack.contains((story.getSouth()).getKey()) ) || !story.getSouth().isLocked()){
+
                                     if(story.getSouth().isLocked() && backpack.contains((story.getSouth()).getKey())){
-                                        System.out.println("Youve unlocked a door");
+                                        story.getSouth().setLock(false);
+                                        System.out.println("Youve unlocked a door/alter");
                                     }
                                     story = story.getSouth();
                                 }else{
@@ -233,14 +251,15 @@ public class Story_Development {
                                 }
                             }
                             break;
-
+                        //repeats for west as well
                         case "west":
                             if(story.getWest()== null ){
                                 System.out.println("You hit your head against a wall");
                             }else{
                                 if( (story.getWest().isLocked() && backpack.contains((story.getWest()).getKey())) || !story.getWest().isLocked()){
                                     if(story.getWest().isLocked() && backpack.contains((story.getWest()).getKey())){
-                                        System.out.println("Youve unlocked a door");
+                                        story.getWest().setLock(false);
+                                        System.out.println("Youve unlocked a door/alter");
                                     }
                                     story = story.getWest();
                                 }else{
@@ -254,7 +273,20 @@ public class Story_Development {
                     }
                     
                     break;
+
                 case "examine":
+                    //checks if they want ot examine room or an item in the inventory
+                    switch (choice[1]) {
+                        case "room":   
+                            
+                            break;
+                    
+                        default:
+
+                            System.out.println("The item isnt in your inventory, i think youre going crazy");
+                            break;
+                    }
+
                     break;
                 case "inventory":
                 case "backpack":
@@ -272,9 +304,9 @@ public class Story_Development {
                     System.out.println("2) Move East");
                     System.out.println("3) Move South");
                     System.out.println("4) Move West");
-                    System.out.println("5) Examine (the current room)");
+                    System.out.println("5) Examine (the current room or an item in the inventory)");
                     System.out.println("6) Take (item)");
-                    System.out.println("7) backpack");
+                    System.out.println("7) Backpack");
                     break;
             }
             System.out.println();
