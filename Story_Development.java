@@ -7,13 +7,10 @@ public class Story_Development {
     public static class Items{
         private String name;
         private String description;
-        private String useFor;
-        
-        
-        public Items(String name,String description,String useFor){
+            
+        public Items(String name,String description){
             this.name = name;
             this.description = description;
-            this.useFor = useFor;
             
         }
         public Items(){
@@ -21,9 +18,10 @@ public class Story_Development {
             this.description = "";
             
         }
-        public Strong usedFor(){
-            return this.useFort;
+        public void getDescription(){
+            System.out.println(this.description);
         }
+
         public String getName(){
             return this.name;
         }
@@ -90,8 +88,8 @@ public class Story_Development {
         public void getDescription(){
             System.out.println(this.description);
         }
-        public void getExamine(){
-            System.out.println(this.examine);
+        public String getExamine(){
+            return (this.examine);
         }
         public void setNorth(Rooms room){
             this.north = room;
@@ -123,7 +121,7 @@ public class Story_Development {
         String description = "In front of you is a bookshelf filled with books and random potions. \nYou see a locked door to the East. \nYou see an alter with a sock engraving on it to the South.";
         String examine = "You look closely at the bookshelf. You see a lot of different books and potions. \n You avoid the potions since they seem harmful.\nHowever you see a bloody key poking out of a book";
         Items[] items = new Items[1];
-        items[0] = new Items("bloody key","A bloody key to an unknown door or chest","door");
+        items[0] = new Items("bloody key","A bloody key to an unknown door or chest");
         Rooms main = new Rooms(description, examine, items, false, "");
 
         description = "Youre in a dark long hall way. With the exit to the west";
@@ -134,7 +132,9 @@ public class Story_Development {
         locked_door.setWest(main);
 
         items = new Items[0];
-        description = "Congratulations youve found the exit to the mad lair";
+        description = "You pressed the hard sock into the alter and a door opens up."+
+                    "\nAs the door opens, you see harry potter staring at you while holding a wand."+
+                    "\nBefore you know, you have died.";
         Rooms exit = new Rooms(description, "", items, true, "sock");
         main.setSouth(exit);
         exit.setNorth(main);
@@ -149,7 +149,7 @@ public class Story_Development {
         description = "Youre in a dim lit room. \nYou see a hole in the wall thats too small to fit your hand in.\nYou also see a sign above the hole saying 'Special Suprise'";
         examine = "As you look closely at the sign, you can see something dripping all over the sign, with a sock stuck behind it";
         items = new Items[1];
-        items[0] = new Items("sock","A random sock that, you dont want to wear","alter");
+        items[0] = new Items("sock","A random sock that, you dont want to wear");
         Rooms board = new Rooms(description, examine, items, false, "");
         hall.setEast(board);
         board.setWest(hall);
@@ -162,11 +162,18 @@ public class Story_Development {
         Scanner myObj = new Scanner(System.in);
         Rooms story = createStory();
         ArrayList<String> backpack = new ArrayList<String>();
+        ArrayList<Items> backpackObj = new ArrayList<Items>();
+
         System.out.println("Type something to start");
         String start = myObj.nextLine();
         System.out.println("You've woken up in cave like lair. As you look around, you see a board with a name 'Harry Potter'. It seems youre trapped in a mad wizards lair");
+        story.getDescription();
+
         do{//swtich case with a 2 word case; ex: examine room
-            story.getDescription();
+            //if it reaches the end then it breaks the loop
+            if(story.getExamine().equals("")){
+                break;
+            }
             System.out.print("What do you want to do? ");
             start = myObj.nextLine();
             start.toLowerCase();
@@ -185,6 +192,7 @@ public class Story_Development {
                     
                     if(Arrays.stream(story.getItemName()).anyMatch(item::equals)){
                         backpack.add(item);
+                        backpackObj.add(story.getItem(item));
 
                     }else{
                         System.out.println("You rip a brain cell out of your head");
@@ -207,8 +215,9 @@ public class Story_Development {
                                         story.getEast().setLock(false);
                                         System.out.println("Youve unlocked a door/alter");
                                     }
-                                    //moves east
+                                    //moves east and prints the description of the room
                                     story = story.getEast();
+                                    story.getDescription();
                                 }else{
                                     //if you dont have the key and its locked and it states its locked
                                     System.out.println("ITS LOCKED YOU WEIRDO");
@@ -226,8 +235,9 @@ public class Story_Development {
                                         story.getNorth().setLock(false);
                                         System.out.println("Youve unlocked a door/alter");
                                     }
-
+                                    //moves north and prints the description of the room
                                     story = story.getNorth();
+                                    story.getDescription();
                                 }else{
                                     System.out.println("ITS LOCKED YOU WEIRDO");
                                 }
@@ -245,7 +255,9 @@ public class Story_Development {
                                         story.getSouth().setLock(false);
                                         System.out.println("Youve unlocked a door/alter");
                                     }
+                                    //moves south and prints the description of the room
                                     story = story.getSouth();
+                                    story.getDescription();
                                 }else{
                                     System.out.println("ITS LOCKED YOU WEIRDO");
                                 }
@@ -261,7 +273,9 @@ public class Story_Development {
                                         story.getWest().setLock(false);
                                         System.out.println("Youve unlocked a door/alter");
                                     }
+                                    //moves west and prints the description of the room
                                     story = story.getWest();
+                                    story.getDescription();
                                 }else{
                                     System.out.println("ITS LOCKED YOU WEIRDO");
                                 }
@@ -276,20 +290,30 @@ public class Story_Development {
 
                 case "examine":
                     //checks if they want ot examine room or an item in the inventory
+                        if (choice.length > 2){
+                            choice[1] = choice[1]+" "+choice[2];
+                        }
                     switch (choice[1]) {
+                        
                         case "room":   
-                            
+                            //prints out what the user examined in the room
+                            System.out.println(story.getExamine());;
                             break;
                     
                         default:
-
-                            System.out.println("The item isnt in your inventory, i think youre going crazy");
+                            //if the item is in the backpack then it prints it out 
+                            if(backpack.contains(choice[1])){
+                                backpackObj.get(backpack.indexOf(choice[1])).getDescription();
+                            }else{
+                                System.out.println("The item isnt in your inventory, i think youre going crazy");
+                            }
                             break;
                     }
 
                     break;
                 case "inventory":
                 case "backpack":
+                //checks the backpack
                     if (backpack.size() <=0){
                         System.out.println("You have nothing in your bag");
                     }
@@ -299,6 +323,8 @@ public class Story_Development {
                     break;
 
                 default:
+                //gives you a hint on what you can do 
+
                     System.out.println("Here are your options:");
                     System.out.println("1) Move North");
                     System.out.println("2) Move East");
@@ -311,7 +337,7 @@ public class Story_Development {
             }
             System.out.println();
         }while(!start.equals("") );
-
+        System.out.println("Teehee");
         myObj.close();
     }
 }
