@@ -13,11 +13,13 @@ public class Story_Development {
             this.description = description;
             
         }
+
         public Items(){
             this.name = "";
             this.description = "";
             
         }
+        
         public void getDescription(){
             System.out.println(this.description);
         }
@@ -61,6 +63,7 @@ public class Story_Development {
             }
             
         }
+
         public Items getItem(String name){
             for (int i =0;i < this.items.length;i++){
                 if (this.items[i].getName().equals(name)){
@@ -69,6 +72,7 @@ public class Story_Development {
             }
             return new Items();
         }
+
         public String[] getItemName(){
             String[] itemsName = new String[this.items.length];
             for(int i = 0; i < this.items.length; i++){
@@ -76,42 +80,55 @@ public class Story_Development {
             }
             return itemsName;
         }
+
         public void setLock(boolean locked){
             this.locked = locked;
         }
+
         public boolean isLocked(){
             return this.locked;
         }
+
         public String getKey(){
             return this.key;
         }
+
         public void getDescription(){
             System.out.println(this.description);
         }
+
         public String getExamine(){
             return (this.examine);
         }
+
         public void setNorth(Rooms room){
             this.north = room;
         }
+
         public void setEast(Rooms room){
             this.east = room;
         }
+
         public void setSouth(Rooms room){
             this.south = room;
         }
+        
         public void setWest(Rooms room){
             this.west = room;
         }
+
         public Rooms getNorth(){
             return this.north;
         }
+
         public Rooms getEast(){
             return this.east;
         }
+
         public Rooms getSouth(){
             return this.south;
         }
+
         public Rooms getWest(){
             return this.west;
         }
@@ -153,7 +170,6 @@ public class Story_Development {
         Rooms board = new Rooms(description, examine, items, false, "");
         hall.setEast(board);
         board.setWest(hall);
-        //need to add a statement for going backwards, we have a statement for forwards 
         
         return main;
     }
@@ -161,8 +177,8 @@ public class Story_Development {
     public static void main(String[] args) {
         Scanner myObj = new Scanner(System.in);
         Rooms story = createStory();
-        ArrayList<String> backpack = new ArrayList<String>();
-        ArrayList<Items> backpackObj = new ArrayList<Items>();
+        ArrayList<String> backpack = new ArrayList<String>(); // one with just the name
+        ArrayList<Items> backpackObj = new ArrayList<Items>();// one with the object in it
 
         System.out.println("Type something to start");
         String start = myObj.nextLine();
@@ -189,7 +205,7 @@ public class Story_Development {
                     }else{
                         item = choice[1];
                     }
-                    
+                    //adds the item into both backpacks
                     if(Arrays.stream(story.getItemName()).anyMatch(item::equals)){
                         backpack.add(item);
                         backpackObj.add(story.getItem(item));
